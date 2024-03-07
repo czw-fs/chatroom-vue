@@ -3,11 +3,11 @@
 
     <el-header class="homeHeader">
       <router-link to="/" active-class="titlebox">
-      <div class="title">
-        微言聊天室管理端
-      </div>
-    </router-link>
-      <div>
+        <div class="title">
+          微言聊天室管理端
+        </div>
+      </router-link>
+
         <el-dropdown class="choices" @command="commandHandler">
           <span class="el-dropdown-link">
             {{ user.name }}<i><img :src="user.userProfile"></i>
@@ -18,12 +18,13 @@
             <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </div>
+
     </el-header>
 
     <el-container>
-      <el-aside>
-        <el-menu router unique-opened>
+      <div style="background-color: #4a4d50;">
+        <el-aside>
+        <el-menu router unique-opened background-color="#4a4d50" text-color="#ffffff">
           <el-submenu :index="index + ''" v-for="(item, index) in routes" v-if="item.hidden != true" :key="index">
             <template slot="title">
               <i style="color: #2F86D2;margin-right: 8px" :class="item.iconCls"></i>
@@ -34,6 +35,7 @@
           </el-submenu>
         </el-menu>
       </el-aside>
+      </div>
 
       <el-main>
         <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path != '/'">
@@ -41,9 +43,12 @@
           <el-breadcrumb-item>{{ this.$router.currentRoute.name }}</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="homeWelcome" v-if="this.$router.currentRoute.path == '/'">
-            欢迎来到微言聊天室管理端！
+          欢迎来到微言聊天室管理端！
         </div>
-        <router-view class="homeRouterView" />
+
+        <transition :name="transitionName">
+          <router-view class="homeRouterView" />
+        </transition>
       </el-main>
 
     </el-container>
@@ -73,14 +78,41 @@ export default {
     commandHandler(cmd) {
       //注销登录操作
     }
+  },
+
+  watch: {
+    //使用watch 监听$router的变化
+    $route(to, from) {
+      //如果to索引大于from索引,判断为前进状态,反之则为后退状态
+      console.log(to, "to");
+      console.log(from, "from");
+
+      this.transitionName = "slide-left";
+
+      // this.transitionName = "slide-right";
+
+    },
   }
 }
 </script>
 
 
 <style scoped>
+
+.el-main{
+  padding: 0;
+}
+
+.el-container {
+  height: 100%;
+}
+
+.element.style{
+  height: 57px;
+}
+
 .homeHeader {
-  background-color: #409eff;
+  background-color: #107fee;;
   display: flex;
   /*flex布局*/
   align-items: center;
@@ -105,7 +137,8 @@ export default {
   width: 48px;
   height: 48px;
   border-radius: 24px;
-  margin-left: 10px;
+  margin-left: 20px;
+  margin-right: 52px  ;
 }
 
 .el-dropdown-link {
@@ -123,15 +156,53 @@ export default {
 .homeRouterView {
   margin-top: 15px;
 }
-.el-aside{
+
+.el-aside {
   overflow: hidden;
 }
 
-.titlebox{
+.titlebox {
   text-decoration: none;
   color: black;
+  margin: 0 auto;
 }
-.title:active{
+
+.title:active {
   color: rgb(51, 51, 51);
+}
+
+
+
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  will-change: transform;
+  transition: all 500ms;
+  position: absolute;
+}
+
+.slide-right-enter {
+  transform: translate3d(-100%, 0, 0);
+}
+
+.slide-right-leave-active {
+  transform: translate3d(100%, 0, 0);
+}
+
+.slide-right-enter-to {
+  transform: translate3d(0, 0, 0);
+}
+
+.slide-left-enter {
+  transform: translate3d(100%, 0, 0);
+}
+
+.slide-left-leave-active {
+  transform: translate3d(0%, 0, 0);
+}
+
+.slide-right-enter-to {
+  transform: translate3d(0, 0, 0);
 }
 </style>

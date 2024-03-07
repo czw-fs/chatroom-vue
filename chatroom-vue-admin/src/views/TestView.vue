@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    aaa
+    <h1>你好，世界</h1>
   </div>
 </template>
 
@@ -12,6 +12,6 @@ export default {
 
 <style scoped>
 .box{
-    background-color: red;
+    background-color: rgb(255, 255, 255);
 }
 </style>

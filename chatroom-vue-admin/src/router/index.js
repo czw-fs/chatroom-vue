@@ -17,24 +17,37 @@ const routes = [
     iconCls:"fa fa-user",
     children:[{
       path:'userinfo',
-      name:'用户信息管理',
-      component:() =>import('../views/system/UserInfo.vue'),
+      name:'管理系统用户信息',
+      component:() =>import('../views/system/SystemUserInfo.vue'),
     }]
   },
   {
     path: '/',
-    name:'聊天记录管理',
+    name:'群',
     iconCls:'fa fa-book',
     component: () =>import('../views/HomeView.vue'),
     children:[
       {
         path:'groupChatRecord234234',
-        name:'群聊记录管理',
+        name:'群组信息详情',
         component:() =>import('../views/TestView.vue'),
       },
       {
         path:'privateChatRecord',
-        name:'私聊记录管理',
+        name:'群聊记录',
+        component:() =>import('../views/TestView.vue'),
+      }
+    ]
+  },
+  {
+    path: '/',
+    name:'用户信息管理',
+    iconCls:'fa fa-book',
+    component: () =>import('../views/HomeView.vue'),
+    children:[
+      {
+        path:'/',
+        name:'群聊信息详情',
         component:() =>import('../views/TestView.vue'),
       }
     ]
