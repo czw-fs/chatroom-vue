@@ -15,7 +15,7 @@
 
     <!-- 分页插件 -->
     <el-pagination background layout="prev, pager, next" :total="query.total" :current-page="query.pageNum"
-      :page-size="query.pageSize" @current-change="handleCurrentChange">
+      :page-size="query.pageSize" @current-change="handleCurrentChange" style="float: right; margin-top: 50px;margin-right: 200px;">
     </el-pagination>
   </div>
 </template>
@@ -27,8 +27,7 @@ export default {
     return {
       query: {
         pageNum: 1,
-        pageSize: 3,
-        total: 0
+        pageSize: 10,
       },
       tableData: [],
       multipleSelection: []
@@ -64,3 +63,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+img{
+  width: 50px;
+  height: 50px;
+  border-radius: 24px;
+}
+</style>

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Layout from '@/layout'
 
 Vue.use(VueRouter)
 
@@ -12,43 +13,48 @@ const routes = [
 
   {
     path:'/',
-    name:'用户管理',
-    component: () =>import('../views/HomeView.vue'),
+    name:'系统',
+    component: Layout,
     iconCls:"fa fa-user",
     children:[{
       path:'userinfo',
       name:'管理系统用户信息',
-      component:() =>import('../views/system/SystemUserInfo.vue'),
+      component:() =>import('@/views/system/SystemUserInfo.vue'),
     }]
   },
   {
     path: '/',
-    name:'群',
+    name:'群组',
     iconCls:'fa fa-book',
-    component: () =>import('../views/HomeView.vue'),
+    component: Layout,
     children:[
       {
-        path:'groupChatRecord234234',
+        path:'groupInfo',
         name:'群组信息详情',
-        component:() =>import('../views/TestView.vue'),
+        component:() =>import('@/views/group/GroupInfo.vue'),
       },
       {
-        path:'privateChatRecord',
+        path:'groupMsg',
         name:'群聊记录',
-        component:() =>import('../views/TestView.vue'),
+        component:() =>import('@/views/group/GroupMsg.vue'),
       }
     ]
   },
   {
     path: '/',
-    name:'用户信息管理',
+    name:'用户',
     iconCls:'fa fa-book',
-    component: () =>import('../views/HomeView.vue'),
+    component: Layout,
     children:[
       {
-        path:'/',
-        name:'群聊信息详情',
-        component:() =>import('../views/TestView.vue'),
+        path:'aaa',
+        name:'聊天室用户信息',
+        component:() =>import('@/views/user/UserInfo.vue'),
+      },
+      {
+        path:'/bbb',
+        name:'用户私聊记录',
+        component:() =>import('@/views/user/UserPrivateMsg.vue'),
       }
     ]
   }
