@@ -1,91 +1,74 @@
 <template>
-  <div id="app">
-    <div class="toolbar">
-      <toolbar></toolbar>
-    </div>
-    <div class="sidebar">
-      <card></card>
-      <list></list>
-    </div>
-    <div class="main">
-      <chattitle></chattitle>
-      <message></message>
-      <usertext></usertext>
-    </div>
-  </div>
+
+    <el-container id="container">
+
+        <el-aside width="null" class="toolbar">
+            <ToolBar></ToolBar>
+        </el-aside>
+
+
+        <el-aside width="null" class="list">
+            <Search></Search>
+            <ChatList></ChatList>
+        </el-aside>
+
+        <el-aside width="null" class="chat">
+            
+        </el-aside>
+    </el-container>
+
 </template>
 
 <script>
-  import card from '../../components/chat/card'
-  import list from '../../components/chat/list.vue'
-  import message from '../../components/chat/message.vue'
-  import usertext from '../../components/chat/usertext.vue'
-  import toolbar from "../../components/chat/toolbar";
-  import chattitle from "../../components/chat/chattitle"
-
-  export default {
-    name: 'ChatRoom',
-    data () {
-      return {
-
-      }
+import ToolBar from '@/components/chat/ToolBar.vue'
+import Search from '@/components/chat/Search.vue'
+import ChatList from '@/components/chat/ChatList.vue'
+import ChatWindow from '@/components/chat/ChatWindow.vue'
+import InputWindow from '@/components/chat/InputWindow.vue'
+export default {
+    components: {
+        ToolBar,
+        Search,
+        ChatList,
+        ChatWindow,
+        InputWindow
     },
-    mounted:function() {
-      //初始化数据
-      this.$store.dispatch('initData');
-      //连接WebSocket服务
-      this.$store.dispatch('connect');
-
+    data() {
+        return {
+            
+        }
     },
-    created () {
-      // //在页面加载时读取sessionStorage里的状态信息
-      // if (sessionStorage.getItem("state") ) {
-      //   this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(sessionStorage.getItem("store"))))
-      // }
+    methods:{
 
-      //在页面刷新时将vuex里的最新信息保存到sessionStorage里
-      window.addEventListener("beforeunload",()=>{
-        sessionStorage.setItem("state",JSON.stringify(this.$store.state))
-      })
-    },
-    components:{
-      toolbar,
-      card,
-      list,
-      message,
-      usertext,
-      chattitle
     }
-  }
+
+}
 </script>
 
-<style lang="scss" scoped>
-  #app {
-    margin: 20px auto;
-    width: 900px;
-    height: 650px;
-    overflow: hidden;
-    border-radius: 10px;
-    .sidebar, .main ,.toolbar{
-      height: 100%;
-    }
-    .toolbar{
-      float: left;
-      color: #f4f4f4;
-      background-color: #2e3238;
-      width: 60px;
-    }
-    .sidebar {
-      float: left;
-      color: #000000;
-      background-color: #ECEAE8;
-      width: 240px;
-    }
-    .main {
-      position: relative;
-      overflow: hidden;
-      background-color: #eee;
-    }
-  }
-</style>
+<style scoped>
+.container {
+    overflow: auto;
+}
 
+.el-aside {
+    height: 93.5vh;
+}
+
+.toolbar {
+    width: 7%;
+    background-color: rgb(55, 59, 63);
+}
+
+.list {
+    width: 20%;
+    background-color: rgb(255, 249, 224);
+}
+
+.chat{
+    width: 73%;
+    background-color: rgb(241, 232, 194);
+}
+.el-aside{
+    overflow: hidden;
+}
+</style>
