@@ -13,7 +13,8 @@
         </el-aside>
 
         <el-aside width="null" class="chat">
-            
+            <ChatWindow></ChatWindow>
+            <InputWindow></InputWindow>
         </el-aside>
     </el-container>
 
