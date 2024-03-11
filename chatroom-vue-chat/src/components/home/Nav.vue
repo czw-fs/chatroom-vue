@@ -3,11 +3,12 @@
         <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
             background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
             
-                <el-menu-item index="1" style="margin-left: 12%;" @click="toChatRoom">聊天室</el-menu-item>
-                <el-menu-item index="2" style="margin-left: 12%;">个人空间</el-menu-item>
-                <el-menu-item index="4" style="margin-left: 12%;" disabled>消息中心</el-menu-item>
+                <el-menu-item index="1" style="margin-left: 12%;" @click="toChatRoom">文字阁楼</el-menu-item>
+                <el-menu-item index="2" style="margin-left: 12%;">语音阁楼</el-menu-item>
+                <el-menu-item index="4" style="margin-left: 12%;" >视频阁楼</el-menu-item>
+                <el-menu-item index="4" style="margin-left: 12%;" >热聊榜单</el-menu-item>
                 <el-menu-item index="5" style="margin-left: 12%;">
-                    <a href="https://www.baidu.com" target="_blank">订单管理</a>
+                    <a href="https://www.baidu.com" target="_blank">语汇阁社区</a>
                 </el-menu-item>
             
         </el-menu>
