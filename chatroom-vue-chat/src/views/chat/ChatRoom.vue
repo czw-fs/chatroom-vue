@@ -72,4 +72,8 @@ export default {
 .el-aside{
     overflow: hidden;
 }
+
+.el-header{
+    height: 0;
+}
 </style>
