@@ -1,3 +1,5 @@
+import { getUserInfo } from '@/api/user.js'
+
 const user = {
     state: {
         id: '',
@@ -44,9 +46,27 @@ const user = {
     },
 
     actions: {
-        // 登录
-        getUserInfo({ commit }, userInfo) {
-            
+        // 获取用户详情
+        getUserInfo({ commit }, userId) {
+            getUserInfo(23).then(resp => {
+                const data = resp.data;
+                const user = data.user;
+                const group = data.group;
+
+                commit('set_id',user.id)
+                commit('set_name',user.userName)
+                commit('set_userProfile',user.userProfile)
+                commit('set_userStateId',user.userStateId)
+                commit('set_id',user.id)
+                commit('set_id',user.id)
+
+                commit('set_groupList',group)
+
+                //进入页面默认显示对话列表为group
+                commit('set_curChatList',group)
+
+                console.log(resp);
+            })
         },
     }
 

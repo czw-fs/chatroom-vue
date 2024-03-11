@@ -4,7 +4,7 @@
 
         <!--群聊列表-->
         <el-main v-if="currentListName == 'group'">
-            <el-container v-for="item in currentList" :key="item.id" class="groupList">
+            <el-container v-for="item in user.curChatList" :key="item.id" class="groupList">
 
                     <el-aside width="null" class="imgAside">
                         <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
@@ -12,12 +12,11 @@
                     </el-aside>
 
                     <el-aside width="null" class="groupName">
-                       群聊：{{ item }}
+                       群聊：{{ item.groupName }}
                     </el-aside>
 
             </el-container>
         </el-main>
-
 
     </el-container>
 </template>
@@ -38,10 +37,10 @@ export default {
         ])
     },
     mounted(){
-        this.currentList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+        
     },
-    created(){
-        // this.currentList = 
+    methods:{
+
     }
 }
 </script>
@@ -61,6 +60,7 @@ export default {
 .groupList{
     height: 66px;
     width: 100%;
+    border-bottom: 1px solid rgb(151, 151, 151);
 }
 .el-imgAside{
     width: 30%;
