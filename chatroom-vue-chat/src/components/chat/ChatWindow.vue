@@ -8,19 +8,19 @@
     </el-header>
 
 
-    <ul class="msgWindow">
-      <li v-for="(item, index) in user.currentChatList" :key="item.index" class="currentMsg">
+    <ul class="msgWindow" ref="chatRoom">
+      <li v-for="(item) in user.curMsgList" :key="item.msgId" class="currentMsg">
 
         <!-- 别人发的消息 -->
-        <div class="otherMsg" v-if="index % 2 == 0">
+        <div class="otherMsg" v-if="item.sendUserId !== user.id">
           <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="Img" class="otherImg">
-          <div class="otherMsgText">消息: {{ index }} : {{ item }}</div>
+          <div class="otherMsgText">{{ item.content }}</div>
         </div>
 
         <!-- 自己发的消息 -->
-        <div class="myMsg" v-if="index % 2 == 1">
+        <div class="myMsg" v-if="item.sendUserId === user.id">
           <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="Img" class="myImg">
-          <div class="myMsgText">消息: {{ index }} : {{ item }}</div>
+          <div class="myMsgText">{{ item.content }}</div>
         </div>
 
       </li>
@@ -32,14 +32,29 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      user: {
-        id: 1,
-        currentChatList: [111111111111111, "释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了释放了空手道解放了", 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
-      }
+    }
+  },
+  computed: {
+    ...mapState([
+      'user'
+    ])
+  },
+  mounted() {
+    this.scrollToBottom()
+  },
+  updated() {
+    this.scrollToBottom()
+  },
+  methods: {
+    scrollToBottom() {
+      // 聊天定位到底部
+      let chatRoom = this.$refs.chatRoom    //通过$refs获取到该元素
+      chatRoom.scrollTop = chatRoom.scrollHeight
     }
   }
 }
@@ -102,7 +117,7 @@ li {
   height: 35px;
 }
 
-.otherMsgText{
+.otherMsgText {
   max-width: 70%;
   border: 1px solid rgb(206, 206, 206);
   border-radius: 16px;
@@ -110,6 +125,8 @@ li {
   word-wrap: break-word;
   word-break: break-all;
   background-color: rgb(217, 217, 218);
+  /* 解析换行符 */
+  white-space: pre-wrap;
 }
 
 .myMsg {
@@ -123,7 +140,7 @@ li {
   height: 35px;
 }
 
-.myMsgText{
+.myMsgText {
   /* width: 70%; */
   max-width: 70%;
   border: 1px solid rgb(206, 206, 206);
@@ -133,5 +150,8 @@ li {
   word-break: break-all;
   background-color: rgb(112, 241, 95);
   line-height: 117%;
+
+  /* 解析换行符 */
+  white-space: pre-wrap;
 }
 </style>

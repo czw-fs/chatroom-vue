@@ -9,11 +9,11 @@
         </el-tooltip>
 
         <el-tooltip class="item" effect="dark" content="私聊" placement="right">
-            <el-button @click="changeToGroup('toPrivate')">私聊</el-button>
+            <el-button @click="changeToGroup('toFriend')">好友</el-button>
         </el-tooltip>
 
         <el-tooltip class="item" effect="dark" content="AI" placement="right">
-            <el-button @click="changeToGroup('toAI')">robot</el-button>
+            <el-button @click="changeToGroup('toRobot')">robot</el-button>
         </el-tooltip>
 
 
@@ -49,10 +49,16 @@ export default {
 
         changeToGroup(data) {
             if(data === 'toGroup'){
+                this.$store.commit('set_curChatListName','group')
                 this.$store.commit('set_curChatList',this.user.groupList)
-            }
-            if(data === 'toPrivate'){
-                this.$store.commit('set_curChatList',[{groupName: '123',id: 1},{groupName: '456',id: 2}])
+            }else if(data === 'toFriend'){
+                this.$store.commit('set_curChatListName','friend')
+                this.$store.commit('set_curChatList',this.user.friendList)
+                console.log(this.user.friendList);
+                console.log(this.user.curChatListName);
+            }else if(data == 'toRobot'){
+                this.$store.commit('set_curChatListName','robot')
+                this.$store.commit('set_curChatList',this.user.robot)
             }
         }
     }

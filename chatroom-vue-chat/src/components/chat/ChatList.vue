@@ -3,18 +3,39 @@
 
 
         <!--群聊列表-->
-        <el-main v-if="currentListName == 'group'">
+        <el-main v-if="user.curChatListName === 'group'">
+            <el-container v-for="item in user.curChatList" :key="item.id" class="groupList"
+                @click.native="showClickGroupMsg(item.id)">
+                <el-aside width="null" class="imgAside">
+                    <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
+                </el-aside>
+                <el-aside width="null" class="groupName">
+                    {{ item.groupName }}
+                </el-aside>
+            </el-container>
+        </el-main>
+
+        <!-- 好友列表 -->
+        <el-main v-if="user.curChatListName === 'friend'">
+            <el-container v-for="item in user.curChatList" :key="item.id" class="friendList">
+                <el-aside width="null" class="imgAside">
+                    <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
+                </el-aside>
+                <el-aside width="null" class="friendName">
+                    群聊：{{ item.userName }}
+                </el-aside>
+            </el-container>
+        </el-main>
+
+        <!-- robot列表 -->
+        <el-main v-if="user.curChatListName === 'robot'">
             <el-container v-for="item in user.curChatList" :key="item.id" class="groupList">
-
-                    <el-aside width="null" class="imgAside">
-                        <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
-                        
-                    </el-aside>
-
-                    <el-aside width="null" class="groupName">
-                       群聊：{{ item.groupName }}
-                    </el-aside>
-
+                <el-aside width="null" class="imgAside">
+                    <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
+                </el-aside>
+                <el-aside width="null" class="groupName">
+                    群聊：{{ item.groupName }}
+                </el-aside>
             </el-container>
         </el-main>
 
@@ -22,25 +43,30 @@
 </template>
 
 <script>
+import { getGroupMsgById } from '@/api/group.js'
 import { mapState } from 'vuex'
 export default {
 
     data() {
         return {
-            currentListName: 'group',
-            currentList:[]
+
         }
     },
-    computed:{
+    computed: {
         ...mapState([
             'user'
         ])
     },
-    mounted(){
-        
-    },
-    methods:{
-
+    methods: {
+        showClickGroupMsg(groupId) {
+            this.user.curChatId = groupId;
+            getGroupMsgById(groupId).then(res => {
+                this.$store.commit('set_curMsgList', res.data);
+                console.log(this.user.curMsgList);
+            }).catch(err => {
+                this.$message.error('获取当前对话消息失败');
+            })
+        }
     }
 }
 </script>
@@ -51,35 +77,53 @@ export default {
     height: 91%;
 }
 
-.el-main{
+.el-main {
     padding: 0;
     width: 100%;
     height: 100%;
     overflow-x: hidden;
 }
-.groupList{
-    height: 66px;
-    width: 100%;
-    border-bottom: 1px solid rgb(151, 151, 151);
+
+.el-aside {
+    overflow: hidden !important;
 }
-.el-imgAside{
+
+.el-imgAside {
     width: 30%;
     height: 100px;
     overflow: scroll;
 }
 
-img{
+img {
     width: 100%;
     height: 100%;
 }
 
-.groupName{
+.groupList {
+    height: 66px;
+    width: 100%;
+    border-bottom: 1px solid rgb(151, 151, 151);
+    cursor: pointer;
+}
+
+.groupName {
     width: 66%;
     height: 100%;
     text-align: center;
     line-height: 66px;
 }
-.el-aside{
-    overflow: hidden !important;
+
+.friendList {
+    height: 66px;
+    width: 100%;
+    border-bottom: 1px solid rgb(151, 151, 151);
+    cursor: pointer;
+}
+
+.friendName {
+    width: 66%;
+    height: 100%;
+    text-align: center;
+    line-height: 66px;
 }
 </style>

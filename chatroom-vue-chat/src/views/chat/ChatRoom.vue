@@ -40,7 +40,9 @@ export default {
         }
     },
     mounted(){
-        this.$store.dispatch("getUserInfo",23)
+        // this.$store.dispatch("getUserInfo",23)
+
+        this.$store.dispatch('connect');
     },
     methods:{
         

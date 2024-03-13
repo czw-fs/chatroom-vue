@@ -9,7 +9,7 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
 const service = axios.create({
     // axios中请求配置有baseURL选项，表示请求URL公共部分
-    baseURL: 'http://127.0.0.1:8082',
+    baseURL: 'http://127.0.0.1:8888',
     // 没有超时限制
     timeout: 0
 })
