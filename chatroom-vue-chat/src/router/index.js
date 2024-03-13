@@ -7,13 +7,19 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'login',
+    component: () => import('@/views/login/Login.vue'),
+    hidden: true,
+  },
+  {
+    path: '/',
     name: 'home',
     component: Layout,
-    children:[
+    children: [
       {
-        path: '/',
+        path: 'chatroom',
         name: '聊天室',
-        component: () => import('@/views/chat/ChatRoom.vue') 
+        component: () => import('@/views/chat/ChatRoom.vue')
       }
     ]
   }

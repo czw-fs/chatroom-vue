@@ -1,6 +1,6 @@
 <template>
     <el-container class="search">
-        <el-input placeholder="请输入内容" v-model="searchName" class="query" @keyup.enter.native="changeUserId">
+        <el-input placeholder="请输入内容" v-model="searchName" class="query">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
     </el-container>
@@ -11,11 +11,6 @@ export default {
  data(){
     return{
         searchName:''
-    }
- },
- methods:{
-    changeUserId(){
-        this.$store.dispatch("getUserInfo",this.searchName)
     }
  }
 }

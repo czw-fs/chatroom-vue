@@ -65,9 +65,9 @@ export default {
         msgTypeId: 1
       }
 
+      //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
       this.user.stomp.send("/group/chat",{},JSON.stringify(curUserSendMsg));
       
-      // this.user.curMsgList.push(curUserSendMsg);
       //发送成功后清空输入框
       this.userInputData = '';
     }

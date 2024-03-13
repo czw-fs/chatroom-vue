@@ -1,7 +1,8 @@
 import { getUserInfo } from '@/api/user.js'
+import { login } from '@/api/login.js'
 import { Message } from "element-ui"
 import SockJS from '@/utils/sockjs'
-import  '@/utils/stomp.js'
+import '@/utils/stomp.js'
 const user = {
     state: {
         id: '',
@@ -13,7 +14,7 @@ const user = {
         userPrivateMsgList: [],//用户私聊信息
         AIList: [],//robot
 
-        stomp:null,
+        stomp: null,
 
         //下面的属性用来存储当前用户点击所展示的是所有数据
         curChatList: [],//当前对话列表
@@ -59,15 +60,24 @@ const user = {
     },
 
     actions: {
+
+        async getUserId({ commit }, loginForm) {
+            await login(loginForm).then(res => {
+                const userId = res.data;
+                //用户相关
+                commit('set_id', userId)
+            })
+
+        },
+
         // 获取用户详情
-        getUserInfo({ commit }, userId) {
-            getUserInfo(23).then(resp => {
+        async getUserInfo({ commit }, userId) {
+            await getUserInfo(23).then(resp => {
                 const data = resp.data;
                 const user = data.user;
                 const group = data.group;
                 const friendList = data.friendList;
-                //用户相关
-                commit('set_id', user.id)
+
                 commit('set_name', user.userName)
                 commit('set_userProfile', user.userProfile)
                 commit('set_userStateId', user.userStateId)
@@ -101,7 +111,7 @@ const user = {
 
                     context.state.curMsgList.push(receiveMsg);
                     // console.log("数组:" + receiveMsg);
-                    
+
                 });
             })
 
