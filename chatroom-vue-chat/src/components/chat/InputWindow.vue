@@ -5,8 +5,7 @@
     </el-header>
 
     <el-main class="main">
-      <el-input type="textarea" :rows="10" placeholder="输入要发送的消息" v-model="userInputData"
-        @keyup.native.enter="inputKeyDown">
+      <el-input type="textarea" :rows="10" placeholder="输入要发送的消息" v-model="userInputData" @keyup.native.enter="sendMsg">
       </el-input>
     </el-main>
 
@@ -33,23 +32,43 @@ export default {
     ])
   },
   methods: {
-    inputKeyDown(event) {
+    sendMsg(event) {
 
-      if (!(event.shiftKey && event.keyCode === 13)) {
-        if (this.currentSession.username=="群聊"){
-        console.log(this.content);
-        this.$store.state.stomp.send("/ws/groupChat",{},JSON.stringify(msgObj));
+      if (this.userInputData.trim() === '') {
+        return;
       }
-        this.sendMsg()
+
+      if (!(event.shiftKey && event.keyCode === 13) || event.target.tagName === 'BUTTON') {
+
+        //group
+        this.sendGroupMsg();
+
+        //friend
+
+
+        //robot
+
+
+        //发送成功后清空输入框
+        this.userInputData = '';
+
       } else {
         this.userInputData += '\n'
       }
 
     },
-    sendMsg() {
-      if (this.userInputData.trim() === '') {
-        return;
+
+
+    sendGroupMsg() {
+      if (this.user.curChatListName == "group") {
+        let groupMsgObj = this.getGroupMsgObj();
+      
+        //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
+        this.user.stomp.send("/group/chat", {}, JSON.stringify(groupMsgObj));
       }
+    },
+
+    getGroupMsgObj() {
       //生成id唯一标识
       let msgId = nanoid(15)
       const curUserSendMsg = {
@@ -64,12 +83,7 @@ export default {
         //消息类型暂时写死
         msgTypeId: 1
       }
-
-      //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
-      this.user.stomp.send("/group/chat",{},JSON.stringify(curUserSendMsg));
-      
-      //发送成功后清空输入框
-      this.userInputData = '';
+      return curUserSendMsg;
     }
   }
 }

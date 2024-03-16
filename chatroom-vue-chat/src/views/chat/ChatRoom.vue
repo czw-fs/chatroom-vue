@@ -40,8 +40,8 @@ export default {
         }
     },
     mounted(){
-        // this.$store.dispatch("getUserInfo",23)
-
+        console.log(window.sessionStorage.getItem("userId"))
+        this.$store.dispatch('getUserInfo', );
         this.$store.dispatch('connect');
     },
     methods:{

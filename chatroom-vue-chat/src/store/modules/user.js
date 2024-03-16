@@ -64,8 +64,9 @@ const user = {
         async getUserId({ commit }, loginForm) {
             await login(loginForm).then(res => {
                 const userId = res.data;
-                //用户相关
-                commit('set_id', userId)
+
+                window.sessionStorage.setItem("userId",userId);
+                commit('set_id', userId);
             })
 
         },
@@ -78,6 +79,7 @@ const user = {
                 const group = data.group;
                 const friendList = data.friendList;
 
+                commit('set_id', user.id);
                 commit('set_name', user.userName)
                 commit('set_userProfile', user.userProfile)
                 commit('set_userStateId', user.userStateId)
@@ -108,9 +110,7 @@ const user = {
 
                     //接收到的消息数据
                     let receiveMsg = JSON.parse(msg.body);
-
                     context.state.curMsgList.push(receiveMsg);
-                    // console.log("数组:" + receiveMsg);
 
                 });
             })

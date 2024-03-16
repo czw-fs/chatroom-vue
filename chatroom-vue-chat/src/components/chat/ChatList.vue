@@ -62,7 +62,6 @@ export default {
             this.user.curChatId = groupId;
             getGroupMsgById(groupId).then(res => {
                 this.$store.commit('set_curMsgList', res.data);
-                console.log(this.user.curMsgList);
             }).catch(err => {
                 this.$message.error('获取当前对话消息失败');
             })
