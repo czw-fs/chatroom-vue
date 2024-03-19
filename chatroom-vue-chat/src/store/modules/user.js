@@ -1,8 +1,8 @@
 import { getUserInfo } from '@/api/user.js'
 import { login } from '@/api/login.js'
 import { Message } from "element-ui"
-import SockJS from '@/utils/sockjs'
-import '@/utils/stomp.js'
+import Stomp from "stompjs";
+import SockJS from "sockjs-client";
 const user = {
     state: {
         id: '',
@@ -65,7 +65,7 @@ const user = {
             await login(loginForm).then(res => {
                 const userId = res.data;
 
-                window.sessionStorage.setItem("userId",userId);
+                window.sessionStorage.setItem("userId", userId);
                 commit('set_id', userId);
             })
 
@@ -102,7 +102,7 @@ const user = {
         //与store实例具有相同方法和属性的context对象
         connect(context) {
             //连接Stomp站点
-            context.state.stomp = Stomp.over(new SockJS('http://localhost:8888/ws/ep'));
+            context.state.stomp = Stomp.over(new SockJS('http://localhost:8888/server'));
 
             //订阅群聊消息
             context.state.stomp.connect({}, success => {
@@ -113,7 +113,21 @@ const user = {
                     context.state.curMsgList.push(receiveMsg);
 
                 });
+
+
+                //私聊消息
+                const friendUrl = '/user/' + window.sessionStorage.getItem("userId") + '/chat';
+                console.log(friendUrl)
+                context.state.stomp.subscribe(friendUrl, msg => {
+                    //接收到的消息数据  
+                    // let receiveMsg=JSON.parse(msg.body);
+                    console.log("++++++++++========")
+
+                    // context.state.curMsgList.push(receiveMsg);
+                })
             })
+
+
 
         },
 

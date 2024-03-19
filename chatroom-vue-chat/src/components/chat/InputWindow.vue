@@ -44,7 +44,7 @@ export default {
         this.sendGroupMsg();
 
         //friend
-
+        this.sendFriendMsg();
 
         //robot
 
@@ -62,7 +62,7 @@ export default {
     sendGroupMsg() {
       if (this.user.curChatListName == "group") {
         let groupMsgObj = this.getGroupMsgObj();
-      
+
         //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
         this.user.stomp.send("/group/chat", {}, JSON.stringify(groupMsgObj));
       }
@@ -70,8 +70,8 @@ export default {
 
     getGroupMsgObj() {
       //生成id唯一标识
-      let msgId = nanoid(15)
-      const curUserSendMsg = {
+      let msgId = nanoid(30)
+      const groupMsgObj = {
         msgId: msgId,
         groupId: this.user.curChatId,
         sendUserId: this.user.id,
@@ -83,7 +83,31 @@ export default {
         //消息类型暂时写死
         msgTypeId: 1
       }
-      return curUserSendMsg;
+      return groupMsgObj;
+    },
+    sendFriendMsg() {
+      if (this.user.curChatListName == "friend") {
+        let friendMsgObj = this.getFriendMsgObj();
+
+        //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
+        this.$store.state.user.stomp.send("/ws/chat",{},JSON.stringify(friendMsgObj));
+      }
+    },
+    getFriendMsgObj() {
+      let msgId = nanoid(30)
+      const friendMsg = {
+        msgId: msgId,
+        sendUserId: this.user.id,
+        sendUserName: this.user.userName,
+        sendUserProfile: this.user.userProfile,
+        receiveUserId: this.user.curChatId,
+        content: this.user.InputData,
+        sendTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+
+        //消息类型暂时写死
+        msgTypeId: 1
+      }
+      return friendMsg;
     }
   }
 }

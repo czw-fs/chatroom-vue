@@ -5,7 +5,7 @@
         <!--群聊列表-->
         <el-main v-if="user.curChatListName === 'group'">
             <el-container v-for="item in user.curChatList" :key="item.id" class="groupList"
-                @click.native="showClickGroupMsg(item.id)">
+                @click.native="getGroupMsg(item.id)">
                 <el-aside width="null" class="imgAside">
                     <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
                 </el-aside>
@@ -17,12 +17,12 @@
 
         <!-- 好友列表 -->
         <el-main v-if="user.curChatListName === 'friend'">
-            <el-container v-for="item in user.curChatList" :key="item.id" class="friendList">
+            <el-container v-for="item in user.curChatList" :key="item.id" class="friendList" @click.native="getCurFriendMsg(item.id)">
                 <el-aside width="null" class="imgAside">
                     <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
                 </el-aside>
                 <el-aside width="null" class="friendName">
-                    群聊：{{ item.userName }}
+                    私聊：{{ item.userName }}
                 </el-aside>
             </el-container>
         </el-main>
@@ -43,9 +43,7 @@
 </template>
 
 <script>
-import { getGroupMsgById } from '@/api/group.js'
-
-import { getMsgListByChatId } from '@/api/common.js'
+import { getGroupMsgById,getFriendMsg } from '@/api/chatListMsg.js'
 import { mapState } from 'vuex'
 export default {
 
@@ -60,14 +58,18 @@ export default {
         ])
     },
     methods: {
-        showClickGroupMsg(chatId) {
+        getGroupMsg(chatId) {
             this.user.curChatId = chatId;
-            // getGroupMsgById(groupId).then(res => {
-            //     this.$store.commit('set_curMsgList', res.data);
-            // }).catch(err => {
-            //     this.$message.error('获取当前对话消息失败');
-            // })
-            getMsgListByChatId(chatId,this.user.curChatListName).then(res => {
+            getGroupMsgById(chatId).then(res => {
+                this.$store.commit('set_curMsgList', res.data);
+            }).catch(err => {
+                this.$message.error('获取当前对话消息失败');
+            })
+        },
+        getCurFriendMsg(receiveUserId){
+            this.user.curChatId = receiveUserId;
+            const sendUserId = this.user.id;
+            getFriendMsg(receiveUserId,sendUserId).then(res =>{
                 this.$store.commit('set_curMsgList', res.data);
             }).catch(err => {
                 this.$message.error('获取当前对话消息失败');
@@ -132,4 +134,4 @@ img {
     text-align: center;
     line-height: 66px;
 }
-</style>
+</style>@/api/msg.js

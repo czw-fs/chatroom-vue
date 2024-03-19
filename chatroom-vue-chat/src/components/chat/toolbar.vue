@@ -16,6 +16,10 @@
             <el-button @click="changeToGroup('toRobot')">robot</el-button>
         </el-tooltip>
 
+        <el-tooltip class="item" effect="dark" content="AI" placement="right">
+            <el-button @click="logOut">logOut</el-button>
+        </el-tooltip>
+
 
 
 
@@ -54,12 +58,14 @@ export default {
             }else if(data === 'toFriend'){
                 this.$store.commit('set_curChatListName','friend')
                 this.$store.commit('set_curChatList',this.user.friendList)
-                console.log(this.user.friendList);
-                console.log(this.user.curChatListName);
             }else if(data == 'toRobot'){
                 this.$store.commit('set_curChatListName','robot')
                 this.$store.commit('set_curChatList',this.user.robot)
             }
+        },
+        logOut(){
+            window.sessionStorage.removeItem("userId");
+            this.$router.push("/login")
         }
     }
 
