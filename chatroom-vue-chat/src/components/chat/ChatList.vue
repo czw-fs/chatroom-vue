@@ -44,6 +44,8 @@
 
 <script>
 import { getGroupMsgById } from '@/api/group.js'
+
+import { getMsgListByChatId } from '@/api/common.js'
 import { mapState } from 'vuex'
 export default {
 
@@ -58,9 +60,14 @@ export default {
         ])
     },
     methods: {
-        showClickGroupMsg(groupId) {
-            this.user.curChatId = groupId;
-            getGroupMsgById(groupId).then(res => {
+        showClickGroupMsg(chatId) {
+            this.user.curChatId = chatId;
+            // getGroupMsgById(groupId).then(res => {
+            //     this.$store.commit('set_curMsgList', res.data);
+            // }).catch(err => {
+            //     this.$message.error('获取当前对话消息失败');
+            // })
+            getMsgListByChatId(chatId,this.user.curChatListName).then(res => {
                 this.$store.commit('set_curMsgList', res.data);
             }).catch(err => {
                 this.$message.error('获取当前对话消息失败');

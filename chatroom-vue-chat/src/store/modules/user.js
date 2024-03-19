@@ -73,7 +73,7 @@ const user = {
 
         // 获取用户详情
         async getUserInfo({ commit }, userId) {
-            await getUserInfo(23).then(resp => {
+            await getUserInfo(userId).then(resp => {
                 const data = resp.data;
                 const user = data.user;
                 const group = data.group;

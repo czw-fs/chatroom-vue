@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ToolBar from '@/components/chat/ToolBar.vue'
+import ToolBar from '@/components/chat/Toolbar.vue'
 import Search from '@/components/chat/Search.vue'
 import ChatList from '@/components/chat/ChatList.vue'
 import ChatWindow from '@/components/chat/ChatWindow.vue'
@@ -41,7 +41,7 @@ export default {
     },
     mounted(){
         console.log(window.sessionStorage.getItem("userId"))
-        this.$store.dispatch('getUserInfo', );
+        this.$store.dispatch('getUserInfo', window.sessionStorage.getItem("userId"));
         this.$store.dispatch('connect');
     },
     methods:{
@@ -81,4 +81,4 @@ export default {
 .el-header{
     height: 0;
 }
-</style>
+</style>@/components/chat/Toolbar.vue
