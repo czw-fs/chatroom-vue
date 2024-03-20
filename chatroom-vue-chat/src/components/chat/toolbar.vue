@@ -32,13 +32,11 @@ export default {
 
     data() {
         return {
-            url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            
         }
     },
     computed: {
-        ...mapState([
-            'user'
-        ])
+        ...mapState(['chat'])
     },
 
     methods: {
@@ -54,17 +52,17 @@ export default {
         changeToGroup(data) {
             if(data === 'toGroup'){
                 this.$store.commit('set_curChatListName','group')
-                this.$store.commit('set_curChatList',this.user.groupList)
+                this.$store.commit('set_curChatList',this.chat.originChatList.groupList)
             }else if(data === 'toFriend'){
                 this.$store.commit('set_curChatListName','friend')
-                this.$store.commit('set_curChatList',this.user.friendList)
+                this.$store.commit('set_curChatList',this.chat.originChatList.friendList)
             }else if(data == 'toRobot'){
                 this.$store.commit('set_curChatListName','robot')
-                this.$store.commit('set_curChatList',this.user.robot)
+                this.$store.commit('set_curChatList',this.chat.originChatList.AIList)
             }
         },
         logOut(){
-            window.sessionStorage.removeItem("userId");
+            window.sessionStorage.removeItem("user");
             this.$router.push("/login")
         }
     }

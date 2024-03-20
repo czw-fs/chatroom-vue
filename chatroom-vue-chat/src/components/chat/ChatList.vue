@@ -3,8 +3,8 @@
 
 
         <!--群聊列表-->
-        <el-main v-if="user.curChatListName === 'group'">
-            <el-container v-for="item in user.curChatList" :key="item.id" class="groupList"
+        <el-main v-if="chat.curChatListName === 'group'">
+            <el-container v-for="item in chat.curChatList" :key="item.id" class="groupList"
                 @click.native="getGroupMsg(item.id)">
                 <el-aside width="null" class="imgAside">
                     <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
@@ -16,8 +16,8 @@
         </el-main>
 
         <!-- 好友列表 -->
-        <el-main v-if="user.curChatListName === 'friend'">
-            <el-container v-for="item in user.curChatList" :key="item.id" class="friendList" @click.native="getCurFriendMsg(item.id)">
+        <el-main v-if="chat.curChatListName === 'friend'">
+            <el-container v-for="item in chat.curChatList" :key="item.id" class="friendList" @click.native="getCurFriendMsg(item.id)">
                 <el-aside width="null" class="imgAside">
                     <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
                 </el-aside>
@@ -28,8 +28,8 @@
         </el-main>
 
         <!-- robot列表 -->
-        <el-main v-if="user.curChatListName === 'robot'">
-            <el-container v-for="item in user.curChatList" :key="item.id" class="groupList">
+        <el-main v-if="chat.curChatListName === 'robot'">
+            <el-container v-for="item in chat.curChatList" :key="item.id" class="groupList">
                 <el-aside width="null" class="imgAside">
                     <img class="avatar" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
                 </el-aside>
@@ -54,23 +54,20 @@ export default {
     },
     computed: {
         ...mapState([
-            'user'
+            'chat'
         ])
     },
     methods: {
         getGroupMsg(chatId) {
-            this.user.curChatId = chatId;
-            getGroupMsgById(chatId).then(res => {
-                this.$store.commit('set_curMsgList', res.data);
-            }).catch(err => {
-                this.$message.error('获取当前对话消息失败');
-            })
+            this.chat.curMsgList = this.chat.curMsgSession.groupMsgMap.get(chatId.toString())
         },
         getCurFriendMsg(receiveUserId){
             this.user.curChatId = receiveUserId;
             const sendUserId = this.user.id;
             getFriendMsg(receiveUserId,sendUserId).then(res =>{
-                this.$store.commit('set_curMsgList', res.data);
+                // this.$store.commit('set_curMsgList', res.data);
+                this.user.curMsgSession.friendMsgMap.set(receiveUserId,res.data);
+                this.$store.commit('set_curMsgList', this.user.curMsgSession.friendMsgMap.get(receiveUserId));
             }).catch(err => {
                 this.$message.error('获取当前对话消息失败');
             })

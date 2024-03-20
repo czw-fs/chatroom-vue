@@ -39,9 +39,7 @@ export default {
             
         }
     },
-    mounted(){
-        console.log(window.sessionStorage.getItem("userId"))
-        this.$store.dispatch('getUserInfo', window.sessionStorage.getItem("userId"));
+    mounted(){        
         this.$store.dispatch('connect');
     },
     methods:{

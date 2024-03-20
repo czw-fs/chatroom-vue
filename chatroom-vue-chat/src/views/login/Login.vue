@@ -34,7 +34,8 @@ export default {
     methods: {
         async submitLogin() {
             await this.$store.dispatch('getUserId', this.loginForm);
-
+            await this.$store.dispatch('initAllChatData')
+                        
             let path=this.$route.query.redirect;//用户跳转到登录页面之前的页面路径
             this.$router.replace("/chatroom");
         }

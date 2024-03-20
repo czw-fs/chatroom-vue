@@ -9,7 +9,7 @@
 
 
     <ul class="msgWindow" ref="chatRoom">
-      <li v-for="(item) in user.curMsgList" :key="item.msgId" class="currentMsg">
+      <li v-for="(item) in chat.curMsgList" :key="item.msgId" class="currentMsg">
 
         <!-- 别人发的消息 -->
         <div class="otherMsg" v-if="item.sendUserId !== user.id">
@@ -41,11 +41,12 @@ export default {
   },
   computed: {
     ...mapState([
+      'chat',
       'user'
     ])
   },
   mounted() {
-    
+
     this.scrollToBottom()
   },
   updated() {

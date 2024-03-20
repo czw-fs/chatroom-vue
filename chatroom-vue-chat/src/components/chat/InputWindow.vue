@@ -23,12 +23,14 @@ import { nanoid } from 'nanoid'
 export default {
   data() {
     return {
-      userInputData: ''
+      userInputData: '',
     }
   },
   computed: {
     ...mapState([
-      'user'
+      'chat',
+      'user',
+      'curStomp'
     ])
   },
   methods: {
@@ -60,11 +62,11 @@ export default {
 
 
     sendGroupMsg() {
-      if (this.user.curChatListName == "group") {
+      if (this.chat.curChatListName == "group") {
         let groupMsgObj = this.getGroupMsgObj();
 
         //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
-        this.user.stomp.send("/group/chat", {}, JSON.stringify(groupMsgObj));
+        this.curStomp.stomp.send("/group/chat", {}, JSON.stringify(groupMsgObj));
       }
     },
 
@@ -73,7 +75,7 @@ export default {
       let msgId = nanoid(30)
       const groupMsgObj = {
         msgId: msgId,
-        groupId: this.user.curChatId,
+        groupId: this.chat.curChatId,
         sendUserId: this.user.id,
         sendUserName: this.user.userName,
         sendUserProfile: this.user.userProfile,
@@ -89,7 +91,10 @@ export default {
       if (this.user.curChatListName == "friend") {
         let friendMsgObj = this.getFriendMsgObj();
 
-        //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
+        //显示自己发送的消息
+        this.user.curMsgList.push(friendMsgObj)
+
+        //私发
         this.$store.state.user.stomp.send("/ws/chat",{},JSON.stringify(friendMsgObj));
       }
     },
@@ -100,8 +105,8 @@ export default {
         sendUserId: this.user.id,
         sendUserName: this.user.userName,
         sendUserProfile: this.user.userProfile,
-        receiveUserId: this.user.curChatId,
-        content: this.user.InputData,
+        receiveUserId: this.chat.curChatId,
+        content: this.userInputData,
         sendTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
 
         //消息类型暂时写死
