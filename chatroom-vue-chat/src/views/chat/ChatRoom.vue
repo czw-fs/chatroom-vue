@@ -36,14 +36,24 @@ export default {
     },
     data() {
         return {
-            
+
         }
     },
-    mounted(){        
+    mounted() {
         this.$store.dispatch('connect');
+
+        //在页面刷新时将vuex里的最新信息保存到sessionStorage里
+        window.addEventListener("beforeunload", () => {
+            sessionStorage.setItem("chat", JSON.stringify(this.$store.state.chat))
+        })
     },
-    methods:{
-        
+    created() {
+
+
+
+    },
+    methods: {
+
     }
 
 }
@@ -68,15 +78,16 @@ export default {
     background-color: rgb(255, 249, 224);
 }
 
-.chat{
+.chat {
     width: 73%;
     background-color: rgb(241, 232, 194);
 }
-.el-aside{
+
+.el-aside {
     overflow: hidden;
 }
 
-.el-header{
+.el-header {
     height: 0;
 }
 </style>@/components/chat/Toolbar.vue

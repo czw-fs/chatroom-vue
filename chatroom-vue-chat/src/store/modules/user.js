@@ -39,21 +39,33 @@ const user = {
         // 获取用户详情
         async getUserInfo({ commit }, userId) {
             await getUserInfo(userId).then(resp => {
-                const user = resp.data.user;
+                const user = resp.data;
 
                 //用户个人信息
+                console.log(user)
                 commit('set_id', user.id);
                 commit('set_name', user.userName)
                 commit('set_userProfile', user.userProfile)
                 commit('set_userStateId', user.userStateId)
 
-                window.sessionStorage.setItem("user",user)
+                window.sessionStorage.setItem("user",JSON.stringify(user))
             }).catch(err => {
-                Message.error({ message: err })
+                Message.error({err})
             })
         },
     }
 
+}
+
+// 在页面加载时读取sessionStorage里的状态信息
+if (sessionStorage.getItem("user")) {
+
+    const savedStateString = window.sessionStorage.getItem('user');
+    if (savedStateString) {
+        const savedState = JSON.parse(savedStateString);
+        Object.assign(user.state, savedState);
+    }
+    console.log(user.state.id)
 }
 
 export default user

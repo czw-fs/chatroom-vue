@@ -34,6 +34,8 @@ export default {
     methods: {
         async submitLogin() {
             await this.$store.dispatch('getUserId', this.loginForm);
+            console.log(this.$store.state.user.id)
+            await this.$store.dispatch('getUserInfo',this.$store.state.user.id)
             await this.$store.dispatch('initAllChatData')
                         
             let path=this.$route.query.redirect;//用户跳转到登录页面之前的页面路径

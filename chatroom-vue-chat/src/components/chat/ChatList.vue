@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { getGroupMsgById,getFriendMsg } from '@/api/chatListMsg.js'
 import { mapState } from 'vuex'
 export default {
 
@@ -59,18 +58,13 @@ export default {
     },
     methods: {
         getGroupMsg(chatId) {
-            this.chat.curMsgList = this.chat.curMsgSession.groupMsgMap.get(chatId.toString())
+            this.chat.curChatId = chatId;
+            this.chat.curMsgList = this.chat.curMsgSession.groupMsgMap[chatId];
+            // console.log(this.chat.curMsgList)
         },
         getCurFriendMsg(receiveUserId){
-            this.user.curChatId = receiveUserId;
-            const sendUserId = this.user.id;
-            getFriendMsg(receiveUserId,sendUserId).then(res =>{
-                // this.$store.commit('set_curMsgList', res.data);
-                this.user.curMsgSession.friendMsgMap.set(receiveUserId,res.data);
-                this.$store.commit('set_curMsgList', this.user.curMsgSession.friendMsgMap.get(receiveUserId));
-            }).catch(err => {
-                this.$message.error('获取当前对话消息失败');
-            })
+            this.chat.curChatId = receiveUserId;
+            this.chat.curMsgList = this.chat.curMsgSession.friendMsgMap[receiveUserId];
         }
     }
 }

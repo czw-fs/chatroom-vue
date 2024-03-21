@@ -1,6 +1,7 @@
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import chat from './chat.js'
+import user from './user.js'
 const curStomp = {
     state:{
         //连接
@@ -20,20 +21,20 @@ const curStomp = {
 
                     //接收到的消息数据
                     let receiveMsg = JSON.parse(msg.body);
-                    
-                    chat.state.curMsgSession.groupMsgMap.get(receiveMsg.groupId.toString()).push(receiveMsg)
-                    console.log( chat.state.curMsgSession.groupMsgMap.get(receiveMsg.groupId.toString()))
+                    console.log(receiveMsg.groupId.toString());
+                    chat.state.curMsgSession.groupMsgMap[receiveMsg.groupId.toString()].push(receiveMsg)
+
+                    console.log( chat.state.curMsgSession.groupMsgMap[receiveMsg.groupId.toString()])
 
                 });
 
                 //私聊消息
-                const friendUrl = '/user/' + window.sessionStorage.getItem("userId") + '/chat';
+                const friendUrl = '/user/' + user.state.id + '/chat';
                 console.log(friendUrl)
                 context.state.stomp.subscribe(friendUrl, msg => {
                     //接收到的消息数据  
                     let receiveMsg=JSON.parse(msg.body);
-                    console.log("++++++++++========")
-                    console.log(receiveMsg)
+                    chat.state.curMsgSession.friendMsgMap[receiveMsg.sendUserId.toString()].push(receiveMsg)
                 })
             })
         },

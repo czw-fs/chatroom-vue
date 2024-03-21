@@ -9,21 +9,30 @@
 
 
     <ul class="msgWindow" ref="chatRoom">
-      <li v-for="(item) in chat.curMsgList" :key="item.msgId" class="currentMsg">
 
-        <!-- 别人发的消息 -->
-        <div class="otherMsg" v-if="item.sendUserId !== user.id">
-          <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="Img" class="otherImg">
-          <div class="otherMsgText">{{ item.content }}</div>
-        </div>
+      <div v-if="chat.curChatId === null" class="noMsg">
+        请选择聊天列表
+      </div>
 
-        <!-- 自己发的消息 -->
-        <div class="myMsg" v-if="item.sendUserId === user.id">
-          <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="Img" class="myImg">
-          <div class="myMsgText">{{ item.content }}</div>
-        </div>
+      <div v-else>
+        <li v-for="(item) in chat.curMsgList" :key="item.msgId" class="currentMsg">
+          <!-- 别人发的消息 -->
+          <div class="otherMsg" v-if="item.sendUserId !== user.id">
+            <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="Img"
+              class="otherImg">
+            <div class="otherMsgText">{{ item.content }}</div>
+          </div>
 
-      </li>
+          <!-- 自己发的消息 -->
+          <div class="myMsg" v-if="item.sendUserId === user.id">
+            <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="Img" class="myImg">
+            <div class="myMsgText">{{ item.content }}</div>
+          </div>
+        </li>
+      </div>
+
+
+
     </ul>
 
 
@@ -155,5 +164,12 @@ li {
 
   /* 解析换行符 */
   white-space: pre-wrap;
+}
+
+
+.noMsg{
+  text-align: center;
+  line-height: 53.5vh;
+  color: rgb(192, 192, 192);
 }
 </style>

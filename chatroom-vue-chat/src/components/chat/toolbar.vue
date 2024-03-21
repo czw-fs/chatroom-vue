@@ -1,19 +1,19 @@
 <template>
     <el-container>
-        <el-header class="photo" >
+        <el-header class="photo">
             <el-image :src="user.userProfile" @error="handleImageError" v-if="user && user.userProfile"></el-image>
         </el-header>
 
         <el-tooltip class="item" effect="dark" content="群聊" placement="right">
-            <el-button @click="changeToGroup('toGroup')">群聊</el-button>
+            <el-button @click="changeToGroup('group')">群聊</el-button>
         </el-tooltip>
 
         <el-tooltip class="item" effect="dark" content="私聊" placement="right">
-            <el-button @click="changeToGroup('toFriend')">好友</el-button>
+            <el-button @click="changeToGroup('friend')">好友</el-button>
         </el-tooltip>
 
         <el-tooltip class="item" effect="dark" content="AI" placement="right">
-            <el-button @click="changeToGroup('toRobot')">robot</el-button>
+            <el-button @click="changeToGroup('robot')">robot</el-button>
         </el-tooltip>
 
         <el-tooltip class="item" effect="dark" content="AI" placement="right">
@@ -32,11 +32,14 @@ export default {
 
     data() {
         return {
-            
+
         }
     },
     computed: {
-        ...mapState(['chat'])
+        ...mapState([
+            'chat',
+            'user'
+        ])
     },
 
     methods: {
@@ -50,19 +53,25 @@ export default {
         },
 
         changeToGroup(data) {
-            if(data === 'toGroup'){
-                this.$store.commit('set_curChatListName','group')
-                this.$store.commit('set_curChatList',this.chat.originChatList.groupList)
-            }else if(data === 'toFriend'){
-                this.$store.commit('set_curChatListName','friend')
-                this.$store.commit('set_curChatList',this.chat.originChatList.friendList)
-            }else if(data == 'toRobot'){
-                this.$store.commit('set_curChatListName','robot')
-                this.$store.commit('set_curChatList',this.chat.originChatList.AIList)
+            if (this.chat.curChatListName !== data) {
+                this.chat.curChatId = null;
+                this.chat.curMsgList = [];
+            }
+
+            if (data === 'group') {
+                this.$store.commit('set_curChatListName', 'group')
+                this.$store.commit('set_curChatList', this.chat.originChatList.groupList)
+            } else if (data === 'friend') {
+                this.$store.commit('set_curChatListName', 'friend')
+                this.$store.commit('set_curChatList', this.chat.originChatList.friendList)
+            } else if (data == 'robot') {
+                this.$store.commit('set_curChatListName', 'robot')
+                this.$store.commit('set_curChatList', this.chat.originChatList.AIList)
             }
         },
-        logOut(){
+        logOut() {
             window.sessionStorage.removeItem("user");
+            window.sessionStorage.removeItem("chat");
             this.$router.push("/login")
         }
     }

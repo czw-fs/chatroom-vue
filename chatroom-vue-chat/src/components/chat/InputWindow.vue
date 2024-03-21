@@ -5,7 +5,7 @@
     </el-header>
 
     <el-main class="main">
-      <el-input type="textarea" :rows="10" placeholder="输入要发送的消息" v-model="userInputData" @keyup.native.enter="sendMsg">
+      <el-input type="textarea" :rows="10" placeholder="输入要发送的消息" v-model="userInputData" :disabled="chat.curChatId ? false : true" @keyup.native.enter="sendMsg">
       </el-input>
     </el-main>
 
@@ -66,7 +66,9 @@ export default {
         let groupMsgObj = this.getGroupMsgObj();
 
         //发送成功后由后端群发消息到监听路径后，推送到群组中的每个用户
+        //群发的消息自己也会收到到，所以不用推送到当前输入列表
         this.curStomp.stomp.send("/group/chat", {}, JSON.stringify(groupMsgObj));
+        this.chat.curMsgList = this.chat.curMsgSession.groupMsgMap[this.chat.curChatId]
       }
     },
 
@@ -88,14 +90,14 @@ export default {
       return groupMsgObj;
     },
     sendFriendMsg() {
-      if (this.user.curChatListName == "friend") {
+      if (this.chat.curChatListName == "friend") {
         let friendMsgObj = this.getFriendMsgObj();
 
-        //显示自己发送的消息
-        this.user.curMsgList.push(friendMsgObj)
-
         //私发
-        this.$store.state.user.stomp.send("/ws/chat",{},JSON.stringify(friendMsgObj));
+        this.curStomp.stomp.send("/ws/chat", {}, JSON.stringify(friendMsgObj));
+
+        //显示自己发送的消息
+        this.chat.curMsgList.push(friendMsgObj)
       }
     },
     getFriendMsgObj() {
