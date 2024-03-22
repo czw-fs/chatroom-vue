@@ -30,7 +30,10 @@ export default {
     height: 100%;
 }
 
-.el-header,.el-main{
-    padding: 0;
+.el-main{
+    padding:0;
+}
+.el-header{
+    padding:0;
 }
 </style>

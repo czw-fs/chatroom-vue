@@ -20,7 +20,13 @@ const routes = [
         path: 'chatroom',
         name: '聊天室',
         component: () => import('@/views/chat/ChatRoom.vue')
-      }
+      },
+      {
+        path: 'community',
+        name: '聊天室',
+        component: () => import('@/views/chat/Community.vue')
+      },
+
     ]
   }
 ]

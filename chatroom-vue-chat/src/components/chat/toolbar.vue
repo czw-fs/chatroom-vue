@@ -1,5 +1,6 @@
 <template>
     <el-container>
+        
         <el-header class="photo">
             <el-image :src="user.userProfile" @error="handleImageError" v-if="user && user.userProfile"></el-image>
         </el-header>
