@@ -23,7 +23,7 @@ const routes = [
     }]
   },
   {
-    path: '/',
+    path: '/group',
     name:'群组',
     iconCls:'fa fa-book',
     component: Layout,
@@ -41,7 +41,7 @@ const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/user',
     name:'用户',
     iconCls:'fa fa-book',
     component: Layout,
@@ -52,7 +52,7 @@ const routes = [
         component:() =>import('@/views/user/UserInfo.vue'),
       },
       {
-        path:'/bbb',
+        path:'bbb',
         name:'用户私聊记录',
         component:() =>import('@/views/user/UserPrivateMsg.vue'),
       }
