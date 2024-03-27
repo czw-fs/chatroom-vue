@@ -28,6 +28,8 @@ export default {
 #lay{
     width: 100%;
     height: 100%;
+    /* background-image:url('https://pic.3gbizhi.com/uploadmark/20240304/f52da0d6b5c14e87d6499270e05120a5.jpg'); */
+    /* background-size: cover; */
 }
 
 .el-main{

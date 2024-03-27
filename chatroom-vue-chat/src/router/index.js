@@ -23,10 +23,14 @@ const routes = [
       },
       {
         path: 'community',
-        name: '聊天室',
+        name: '热帖',
         component: () => import('@/views/chat/Community.vue')
       },
-
+      {
+        path: 'welcome',
+        name: '欢迎页面',
+        component: () => import('@/views/Welcome.vue')
+      },
     ]
   }
 ]

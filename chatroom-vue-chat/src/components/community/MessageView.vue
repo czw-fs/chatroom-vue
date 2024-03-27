@@ -8,62 +8,94 @@
             <el-button type="primary" style="margin-top: 10px;" @click="removeRespComment">取消发表</el-button>
         </div>
 
-        <ul ref="commentList">
-            <li ref="mainElement" v-for="(item, index) in [1, 2, 3]" :key="index">
+        <ul ref="commentList" v-if="tableData && tableData.length > 0">
+            <li ref="mainElement" v-for="(item, index) in tableData" :key="index">
                 <div class="message">
                     <el-avatar shape="circle" :size="60" fit="fit" :src="url"></el-avatar>
                     <div class="rightcontent">
-                        <div style="margin-bottom: 10px;font-weight: 600;">张三</div>
+                        <div style="margin-bottom: 10px;font-weight: 600;">{{ item.sendUser.userName }}</div>
                         <div>
-                            这篇文章写的真好这篇文章写的真好这篇文章写的真好这篇文章写的真章写的真好这篇文章写的真好章写的真好这篇文章写的真好章写的真好这篇文章写的真好好这篇文章写的真好这篇文章写的真好这篇文章写的真好这篇文章写的真好篇文章写的真好这篇文章写的真好这篇文章写的真好
+                            {{ item.content }}
                         </div>
 
                         <div class="commentFooter">
-                            <div class="sendTime">2022-01-30 10:06:21</div>
+                            <div class="sendTime">{{ item.updateTime }}</div>
                             <div class="reply" @click="showCommentView">{{ reply }}</div>
                         </div>
                     </div>
                 </div>
-                <div class="submessage">
-                    <el-avatar shape="circle" :size="60" fit="fit" :src="url"></el-avatar>
-                    <div class="rightcontent">
-                        <div style="margin-bottom: 10px;font-weight: 600;">张三</div>
-                        <div>
-                            这篇文章写的真好这篇文章写的真好这篇文章写的真好这篇文章写的真章写的真好这篇文章写的真好章写的真好这篇文章写的真好章写的真好这篇文章写的真好好这篇文章写的真好这篇文章写的真好这篇文章写的真好这篇文章写的真好篇文章写的真好这篇文章写的真好这篇文章写的真好
-                        </div>
-                        <div class="commentFooter">
-                            <div class="sendTime">2022-01-30 10:06:21</div>
-                            <div class="reply" @click="showCommentView">{{ reply }}</div>
+
+                <div v-if="item.children && item.children.length > 0">
+                    <div class="submessage" v-for="(item, index) in item.children" :key="index">
+                        <el-avatar shape="circle" :size="60" fit="fit" :src="url"></el-avatar>
+                        <div class="rightcontent">
+                            <div style="margin-bottom: 10px;font-weight: 600;">{{ item.sendUser.userName }} 回复 {{ item.receiveUser.userName }}</div>
+                            <div>
+                                {{ item.content }}
+                            </div>
+                            <div class="commentFooter">
+                                <div class="sendTime">{{ item.updateTime }}</div>
+                                <div class="reply" @click="showCommentView">{{ reply }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <el-divider></el-divider>
             </li>
 
+            <!-- 分页插件 -->
+            <el-pagination background layout="prev, pager, next" :total="query.total" :current-page="query.pageNum"
+                :page-size="query.pageSize" @current-change="handleCurrentChange" style="text-align: center;">
+            </el-pagination>
         </ul>
+
+        <div v-else style="text-align: center;color: rgb(170, 170, 170);">
+            暂时还没评论，开来发布一个吧！
+        </div>
     </div>
 </template>
 
 <script>
 import Comment from './CommnetView.vue'
+import { getCommentPage } from '@/api/comment.js'
 export default {
     components: {
         Comment
     },
-    props:['msgId'],
+    props: ['msgId'],
     data() {
         return {
+            query: {
+                pageNum: 1,
+                pageSize: 5,
+                total: 0,
+                articleId: ''
+            },
             url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
             data: '# 发福利了！！！  ![image](https://t7.baidu.com/it/u=852388090,130270862&fm=193&f=GIF)',
             reply: '回复',
             textarea: '',
+            tableData: '',
         }
     },
-    created(){
-        console.log("sdjflsjdflskd")
-        console.log(this.msgId)
+    created() {
+        this.query.articleId = this.msgId;
+        // console.log(this.query.articleId)
+        this.getPage();
     },
     methods: {
+        getPage() {
+            getCommentPage(this.query).then(res => {
+                console.log(res)
+                res = res.data
+                this.tableData = res.rows;
+                this.query.total = res.total;
+                console.log(this.tableData)
+            }).catch(error => {
+                this.$message.error(error);
+            })
+        },
+
         //回复
         showCommentView(event) {
             console.log(event.currentTarget.parentNode)
@@ -72,6 +104,10 @@ export default {
         //取消回复
         removeRespComment() {
             this.$refs.commentBox.insertBefore(this.$refs.comment, this.$refs.commentList);
+        },
+        handleCurrentChange(val) {
+            this.query.pageNum = val;
+            this.getPage();
         }
     }
 }
